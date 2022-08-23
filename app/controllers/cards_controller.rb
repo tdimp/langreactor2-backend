@@ -3,8 +3,7 @@ class CardsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found_response
 
   def index
-    cards = Card.all
-    render json: cards
+    render json: Card.all
   end
 
   def show

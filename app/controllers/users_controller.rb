@@ -3,8 +3,7 @@ class UsersController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found_response
   
   def index
-    users = User.all
-    render json: users
+    render json: User.all
   end
   
   def show
