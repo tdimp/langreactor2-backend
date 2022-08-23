@@ -19,7 +19,7 @@ class UsersController < ApplicationController
 
   def update
     user = User.find(params[:id])
-    user.update!(user_params)
+    user.update(user_params)
     render json: user
   end
 
@@ -31,12 +31,16 @@ class UsersController < ApplicationController
 
   private
 
+  def find_user
+    user = User.find(params[:id])
+  end
+
   def user_params
     params.permit(:username, :password, :password_confirmation, :primary_language)
   end
 
   def handle_unprocessable_entity_response(exception)
-    render json: { errors: exception.record.errors }, status: :unprocessable_entity
+    render json: { error: exception.record.errors.full_messages }, status: :unprocessable_entity
   end
 
   def handle_not_found_response
