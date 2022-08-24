@@ -1,4 +1,5 @@
 class CardsController < ApplicationController
+  before_action :authorize
   rescue_from ActiveRecord::RecordInvalid, with: :handle_unprocessable_entity_response
   rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found_response
 
@@ -29,6 +30,10 @@ class CardsController < ApplicationController
   end
 
   private
+
+  def authorize
+    return render json: { error: "Not authorized" }, status: :unauthorized unless session.include? :user_id
+  end
 
   def find_card
     card = Card.find(params[:id])
