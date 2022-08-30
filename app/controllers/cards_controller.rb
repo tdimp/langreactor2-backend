@@ -1,5 +1,5 @@
 class CardsController < ApplicationController
-  before_action :authorize
+  #before_action :authorize
   rescue_from ActiveRecord::RecordInvalid, with: :handle_unprocessable_entity_response
   rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found_response
 
