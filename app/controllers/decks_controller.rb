@@ -1,51 +1,33 @@
 class DecksController < ApplicationController
-  before_action :set_deck, only: %i[ show update destroy ]
+  #before_action :authorize
+  rescue_from ActiveRecord::RecordInvalid, with: :handle_unprocessable_entity_response
+  rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found_response
 
-  # GET /decks
   def index
-    @decks = Deck.all
-
-    render json: @decks
+    #byebug
+    user = User.find(1)
+    render json: user.decks
   end
 
-  # GET /decks/1
   def show
-    render json: @deck
+    deck = Deck.find(params[:id])
+    render json: deck.cards
   end
 
-  # POST /decks
-  def create
-    @deck = Deck.new(deck_params)
 
-    if @deck.save
-      render json: @deck, status: :created, location: @deck
-    else
-      render json: @deck.errors, status: :unprocessable_entity
-    end
-  end
-
-  # PATCH/PUT /decks/1
-  def update
-    if @deck.update(deck_params)
-      render json: @deck
-    else
-      render json: @deck.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /decks/1
-  def destroy
-    @deck.destroy
-  end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_deck
-      @deck = Deck.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def deck_params
-      params.require(:deck).permit(:name, :user_id)
-    end
+  def authorize
+    return render json: { error: "Not authorized" }, status: :unauthorized unless session.include? :user_id
+  end
+
+  def handle_unprocessable_entity_response(exception)
+    render json: { error: exception.record.errors.full_messages }, status: :unprocessable_entity
+  end
+
+  def handle_not_found_response
+    render json: { error: "Deck not found" }, status: :not_found
+  end
+
 end

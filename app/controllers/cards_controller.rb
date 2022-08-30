@@ -1,51 +1,53 @@
 class CardsController < ApplicationController
-  before_action :set_card, only: %i[ show update destroy ]
+  #before_action :authorize
+  rescue_from ActiveRecord::RecordInvalid, with: :handle_unprocessable_entity_response
+  rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found_response
 
-  # GET /cards
   def index
-    @cards = Card.all
-
-    render json: @cards
+    render json: Card.all
   end
 
-  # GET /cards/1
   def show
-    render json: @card
+    card = find_card
+    render json: card
   end
 
-  # POST /cards
   def create
-    @card = Card.new(card_params)
-
-    if @card.save
-      render json: @card, status: :created, location: @card
-    else
-      render json: @card.errors, status: :unprocessable_entity
-    end
+    card = Card.create!(card_params)
+    render json: card
   end
 
-  # PATCH/PUT /cards/1
   def update
-    if @card.update(card_params)
-      render json: @card
-    else
-      render json: @card.errors, status: :unprocessable_entity
-    end
+    card = find_card
+    card.update(card_params)
+    render json: card
   end
 
-  # DELETE /cards/1
   def destroy
-    @card.destroy
+    card = find_card
+    card.destroy
+    head :no_content
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_card
-      @card = Card.find(params[:id])
-    end
 
-    # Only allow a list of trusted parameters through.
-    def card_params
-      params.require(:card).permit(:foreign_language, :primary_lang_txt, :foreign_lang_txt, :img_url)
-    end
+  def authorize
+    return render json: { error: "Not authorized" }, status: :unauthorized unless session.include? :user_id
+  end
+
+  def find_card
+    card = Card.find(params[:id])
+  end
+
+  def card_params
+    params.permit(:foreign_language, :primary_lang_txt, :foreign_lang_txt, :img_url)
+  end
+
+  def handle_unprocessable_entity_response(exception)
+    render json: { error: exception.record.errors.full_messages }, status: :unprocessable_entity
+  end
+
+  def handle_not_found_response
+    render json: { error: "Card not found" }, status: :not_found
+  end
 end
