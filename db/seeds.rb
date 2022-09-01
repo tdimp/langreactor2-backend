@@ -1,4 +1,4 @@
-User.create(username: "testuser", password_digest: "password", primary_language: "English")
+User.create(username: "testuser", password_digest: BCrypt::Password.create("password"), primary_language: "English")
 
 Deck.create(name: "Spanish Deck", user_id: 1)
 Deck.create(name: "German Deck", user_id: 1)

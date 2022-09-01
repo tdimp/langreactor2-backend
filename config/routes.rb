@@ -5,7 +5,7 @@ Rails.application.routes.draw do
 
   # user authentication and logout routes
   post '/login', to: "sessions#create"
-  get '/me', to: "users#show"
+  get '/auth', to: "users#show"
   delete '/logout', to: "sessions#destroy"
 
 end

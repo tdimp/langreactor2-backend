@@ -4,9 +4,8 @@ class DecksController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found_response
 
   def index
-    #byebug
-    user = User.find(1)
-    render json: user.decks
+    decks = Deck.where(user_id: session[:user_id])
+    render json: decks
   end
 
   def show
