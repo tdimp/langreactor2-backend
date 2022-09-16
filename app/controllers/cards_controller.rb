@@ -1,5 +1,5 @@
 class CardsController < ApplicationController
-  before_action :authorize
+  #before_action :authorize
   rescue_from ActiveRecord::RecordInvalid, with: :handle_unprocessable_entity_response
   rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found_response
 
@@ -14,9 +14,8 @@ class CardsController < ApplicationController
 
   def create
     card = Card.create!(card_params)
-    deck_card = DeckCard.create!(deck_card_params)
+    byebug
     render json: card
-    render json: deck_card
   end
 
   def update
@@ -41,12 +40,12 @@ class CardsController < ApplicationController
     card = Card.find(params[:id])
   end
 
-  def card_params
-    params.permit(:foreign_language, :primary_lang_txt, :foreign_lang_txt, :img_url)
+  def find_deck
+    deck = Deck.find(params[:id])
   end
 
-  def deck_card_params
-    params.permit(:deck_id, :card_id=card.id)
+  def card_params
+    params.permit(:foreign_language, :primary_lang_txt, :foreign_lang_txt, :img_url)
   end
 
   def handle_unprocessable_entity_response(exception)
