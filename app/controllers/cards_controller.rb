@@ -13,6 +13,8 @@ class CardsController < ApplicationController
   end
 
   def create
+    @user = User.find_by(id: session[:user_id])
+    #@deck = Deck.find(params[:id])
     card = Card.create!(card_params)
     byebug
     render json: card
