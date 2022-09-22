@@ -13,8 +13,7 @@ class CardsController < ApplicationController
   end
 
   def create
-    @user = User.find_by(id: session[:user_id])
-    #@deck = Deck.find(params[:id])
+    byebug
     card = Card.create!(card_params)
     byebug
     render json: card
@@ -47,7 +46,11 @@ class CardsController < ApplicationController
   end
 
   def card_params
-    params.permit(:foreign_language, :primary_lang_txt, :foreign_lang_txt, :img_url)
+    params.require(:cardData).permit(:foreign_language, :primary_lang_txt, :foreign_lang_txt, :img_url)
+  end
+
+  def deck_params
+    params.require(:deckData).permit(:deck_id)
   end
 
   def handle_unprocessable_entity_response(exception)
