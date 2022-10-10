@@ -45,7 +45,7 @@ class CardsController < ApplicationController
   end
 
   def card_params
-    params.permit(:foreign_language, :primary_lang_txt, :foreign_lang_txt, :img_url)
+    params.permit(:foreign_language, :primary_lang_txt, :foreign_lang_txt, :img_url, :created_by)
   end
 
   def handle_unprocessable_entity_response(exception)
