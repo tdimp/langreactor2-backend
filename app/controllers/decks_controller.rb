@@ -9,7 +9,7 @@ class DecksController < ApplicationController
   end
 
   def show
-    deck = Deck.find(params[:id])
+    deck = Deck.where(user_id: session[:user_id]).find(params[:id]) # This kinda works but needs to be refactored and needs error handling
     render json: deck.cards
   end
 
