@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
-  rescue_from ActiveRecord::RecordInvalid, with: :handle_unprocessable_entity_response
-  rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found_response
-  
+  skip_before_action :authorize, only: [:show, :create]
+ 
   def index
     render json: User.all
   end
@@ -40,13 +39,5 @@ class UsersController < ApplicationController
 
   def user_params
     params.permit(:username, :password, :password_confirmation, :primary_language)
-  end
-
-  def handle_unprocessable_entity_response(exception)
-    render json: { error: exception.record.errors.full_messages }, status: :unprocessable_entity
-  end
-
-  def handle_not_found_response
-    render json: { error: "User not found." }, status: :not_found
   end
 end

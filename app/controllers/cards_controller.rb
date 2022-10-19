@@ -1,10 +1,7 @@
 class CardsController < ApplicationController
-  #before_action :authorize
-  rescue_from ActiveRecord::RecordInvalid, with: :handle_unprocessable_entity_response
-  rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found_response
-
+  
   def index
-    render json: Card.all
+    render json: Card.where(created_by: session[:user_id])
   end
 
   def show
@@ -20,7 +17,7 @@ class CardsController < ApplicationController
 
   def update
     card = find_card
-    card.update(card_params)
+    card.update!(card_params)
     render json: card
   end
 
@@ -32,10 +29,6 @@ class CardsController < ApplicationController
 
   private
 
-  def authorize
-    return render json: { error: "Not authorized" }, status: :unauthorized unless session.include? :user_id
-  end
-
   def find_card
     card = Card.find(params[:id])
   end
@@ -46,13 +39,5 @@ class CardsController < ApplicationController
 
   def card_params
     params.permit(:foreign_language, :primary_lang_txt, :foreign_lang_txt, :img_url, :created_by)
-  end
-
-  def handle_unprocessable_entity_response(exception)
-    render json: { error: exception.record.errors.full_messages }, status: :unprocessable_entity
-  end
-
-  def handle_not_found_response
-    render json: { error: "Card not found" }, status: :not_found
   end
 end
