@@ -1,7 +1,10 @@
 class CardsController < ApplicationController
+
+  
   
   def index
-    render json: Card.where(created_by: session[:user_id])
+    @current_user = find_current_user
+    render json: @current_user.cards
   end
 
   def show
@@ -11,13 +14,14 @@ class CardsController < ApplicationController
 
   def create
     deck = find_deck
-    #byebug
     render json: deck.cards.create!(card_params)
   end
 
   def update
     card = find_card
     card.update!(card_params)
+    # DeckCard.find().... google how to update attributes in join tables (might need to accept a collection and update that way) 
+    # https://kolosek.com/rails-join-table/
     render json: card
   end
 
@@ -29,15 +33,19 @@ class CardsController < ApplicationController
 
   private
 
+  def find_current_user
+    @current_user = User.find(session[:user_id])
+  end
+
   def find_card
-    card = Card.find(params[:id])
+    card = find_current_user.cards.find(params[:id])
   end
 
   def find_deck
-    deck = Deck.find(params[:deck_id])
+    deck = find_current_user.decks.find(params[:deck_id])
   end
 
   def card_params
-    params.permit(:foreign_language, :primary_lang_txt, :foreign_lang_txt, :img_url, :created_by)
+    params.permit(:foreign_language, :primary_lang_txt, :foreign_lang_txt, :img_url, :user_id)
   end
 end
