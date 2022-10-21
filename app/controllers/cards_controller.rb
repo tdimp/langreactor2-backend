@@ -46,6 +46,6 @@ class CardsController < ApplicationController
   end
 
   def card_params
-    params.permit(:foreign_language, :primary_lang_txt, :foreign_lang_txt, :img_url, :user_id)
+    params.permit(:foreign_language, :primary_lang_txt, :foreign_lang_txt, :img_url, :user_id, deck_ids: []) # Added deck_ids as a permitted parameter.
   end
 end
