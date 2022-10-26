@@ -13,8 +13,7 @@ class CardsController < ApplicationController
   end
 
   def create
-    deck = find_deck
-    render json: deck.cards.create!(card_params)
+    render json: Card.create!(card_params)
   end
 
   def update
@@ -22,7 +21,7 @@ class CardsController < ApplicationController
     card.update!(card_params)
     # DeckCard.find().... google how to update attributes in join tables (might need to accept a collection and update that way) 
     # https://kolosek.com/rails-join-table/
-    byebug
+    # byebug
     render json: card
   end
 
@@ -43,7 +42,7 @@ class CardsController < ApplicationController
   end
 
   def find_deck
-    deck = find_current_user.decks.find(params[:deck_id])
+    deck = find_current_user.decks.find(params[:deck_ids])
   end
 
   def card_params
