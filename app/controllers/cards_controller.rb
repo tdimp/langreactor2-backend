@@ -21,7 +21,6 @@ class CardsController < ApplicationController
     card.update!(card_params)
     # DeckCard.find().... google how to update attributes in join tables (might need to accept a collection and update that way) 
     # https://kolosek.com/rails-join-table/
-    # byebug
     render json: card
   end
 
