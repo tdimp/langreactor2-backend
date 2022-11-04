@@ -13,7 +13,8 @@ class DecksController < ApplicationController
   end
 
   def create
-    deck = Deck.create!(deck_params)
+    @current_user = find_current_user
+    deck = @current_user.decks.create!(deck_params)
     render json: deck
   end
 
