@@ -3,7 +3,5 @@ class Card < ApplicationRecord
   has_many :decks, through: :deck_cards
 
   belongs_to :user
-
-  validates :decks, presence: true
   
 end
