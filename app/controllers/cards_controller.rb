@@ -30,6 +30,12 @@ class CardsController < ApplicationController
     head :no_content
   end
 
+  def search
+    cards = filtered_cards
+    byebug
+    render json: cards
+  end
+
   private
 
   def find_current_user
@@ -46,5 +52,13 @@ class CardsController < ApplicationController
 
   def card_params
     params.permit(:foreign_language, :primary_lang_txt, :foreign_lang_txt, :img_url, :user_id, deck_ids: []) # Added deck_ids as a permitted parameter.
+  end
+
+  def filtered_cards
+    cards = Card.all.each do |c|
+      filtered_cards = []
+      filtered_cards << c if c.foreign_lang_txt.include?("ca") or c.primary_lang_txt.include?(params[:search])
+      filtered_cards
+    end
   end
 end

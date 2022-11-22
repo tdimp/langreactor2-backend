@@ -8,4 +8,6 @@ Rails.application.routes.draw do
   get '/auth', to: "users#show"
   delete '/logout', to: "sessions#destroy"
 
+  get '/cards/?', to: "cards#search"
+
 end
