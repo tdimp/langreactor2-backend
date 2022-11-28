@@ -32,7 +32,6 @@ class CardsController < ApplicationController
 
   def search
     cards = filtered_cards
-    byebug
     render json: cards
   end
 
@@ -55,10 +54,9 @@ class CardsController < ApplicationController
   end
 
   def filtered_cards
-    cards = Card.all.each do |c|
-      filtered_cards = []
-      filtered_cards << c if c.foreign_lang_txt.include?("ca") or c.primary_lang_txt.include?(params[:search])
-      filtered_cards
+    cards = Card.all.filter do |c| 
+      c.foreign_lang_txt.downcase.include? params[:query].downcase or
+      c.primary_lang_txt.downcase.include? params[:query].downcase
     end
   end
 end
