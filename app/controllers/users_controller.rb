@@ -1,5 +1,5 @@
 class UsersController < ApplicationController
-  skip_before_action :authorize, only: [:show, :create]
+  skip_before_action :authorize, only: [:show, :create, :language_partner]
  
   def index
     render json: User.all
@@ -30,6 +30,25 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
     user.destroy
     head :no_content
+  end
+
+  def language_partner
+    #filtered_cards = Card.all.select do |c|
+    #  c.foreign_language == params[:language]
+    #end
+#
+    #users_array = filtered_cards.pluck(:user_id)
+#
+    #users = users_array.map do |u|
+    #  User.find(u)
+    #end
+
+    users = User.joins(:cards).where("cards.foreign_language" => params[:language])
+
+    # Create set out of users_array
+    # Return user info for each user in set as user_set
+
+    render json: users, include: :cards
   end
 
   private

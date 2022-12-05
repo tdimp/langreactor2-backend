@@ -9,5 +9,6 @@ Rails.application.routes.draw do
   delete '/logout', to: "sessions#destroy"
 
   get '/search/:query', to: "cards#search"
+  get '/users/search/:language', to: "users#language_partner"
 
 end

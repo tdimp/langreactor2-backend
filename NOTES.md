@@ -61,20 +61,5 @@ The result should be an array containing any cards whose primary_lang_txt or for
 5. Go through steps 1-3 again if necessary
 6. Final test
 
-
-Create custom route to find all cards created by a user
-From frontend: click user's name who created the card (grab user_id, send to backend via params)
-
-
-Time out how long it takes to code this out using this pseudocode: 3 minutes 32 seconds!
-routes.rb
-Create dynamic GET route that searches for Cards with a given username -> make sure route is available and hits the correct controller action
-  username passed to backend via params -> make sure the data from frontend is coming through correctly
-  cards_controller -> user_search to: cards#by_user -> verify controller action is being hit by dynamic route, try with different params to test
-
-cards_controller.rb
-  define a method to get the user object using the username from params -> user.id (find_by, where)
-  define custom controller method that finds all cards whose user_id == user.id (where)
-  render the cards as json to be sent back to front end -> double check with frontend that data is displaying correctly
-
   https://stackoverflow.com/questions/68011517/conditional-rails-serializers-for-show-but-not-index
+
